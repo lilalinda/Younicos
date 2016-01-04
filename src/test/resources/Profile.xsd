@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Mit XMLSpy v2014 (x64) (http://www.altova.com) von Younicos AG (Younicos AG) bearbeitet -->
+<!--Version 5 10/04/2014 -->
+<!-- edited with XMLSpy v2014 sp1 (x64) (http://www.altova.com) by Udo Berninger (Younicos AG) -->
+<!-- Revision R005-SNAPSHOT -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:younicos="http://www.younicos.com/namespace" targetNamespace="http://www.younicos.com/namespace" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+	<xs:element name="powerProfile">
+		<xs:annotation>
+			<xs:documentation>A power profile</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="start" type="younicos:Timestamp"/>
+				<xs:element name="end" type="younicos:Timestamp"/>
+				<xs:element name="powerSequence">
+					<xs:annotation>
+						<xs:documentation>list of tuples (power, time)</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="power" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="power_kW" type="younicos:PowerType"/>
+										<xs:element name="timestamp" type="younicos:Timestamp"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:simpleType name="PowerType">
+		<xs:annotation>
+			<xs:documentation>A power value in kW (min=-6000 kW, max=6000 kW)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:double">
+			<xs:minInclusive value="-6000"/>
+			<xs:maxInclusive value="6000"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Timestamp">
+		<xs:annotation>
+			<xs:documentation>A timestamp</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:dateTime">
+			<xs:minInclusive value="2014-01-01T00:00:00Z"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>
