@@ -39,7 +39,7 @@ public final class TestPowerProfile {
         assertTrue("valid power profile", pp.validate(6000L));
     }
 
-    // --- start and end times problems
+    // --- semantic problems
 
     @Test
     public void endBeforeStart() {
@@ -50,6 +50,12 @@ public final class TestPowerProfile {
     @Test
     public void endEqualsStart() {
         PowerProfile pp = new PowerProfile(start, start, list);
-        assertFalse("end before start", pp.validate(6000L));
+        assertFalse("end equals start", pp.validate(6000L));
+    }
+
+    @Test
+    public void powerTooHigh() {
+        PowerProfile pp = new PowerProfile(start, start, list);
+        assertFalse("power too high", pp.validate(600L));
     }
 }
