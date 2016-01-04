@@ -7,6 +7,9 @@ import org.kohsuke.args4j.Option;
 import java.io.File;
 import java.io.PrintStream;
 
+/**
+ * Entry point for Younicos XML and power profile validation code.
+ */
 public final class Main {
 
     private static void printUsage(PrintStream out, CmdLineParser parser) {
@@ -44,8 +47,15 @@ public final class Main {
             return;
         }
 
-        // TODO: run validation
-        System.out.println("Running validation");
+        // run validation
+        System.out.println("\nRunning validation of "+options.inputFile.getAbsolutePath());
+        try {
+            PowerProfile pp = PowerProfile.importFromXML(options.inputFile);
+            boolean valid = pp.validate(options.maxPower);
+            System.out.println("   *** The given XML file is "+(valid?"":"NOT ")+"valid! ***\n");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     static class YounicosOptions {
