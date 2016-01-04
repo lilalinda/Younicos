@@ -33,8 +33,8 @@ public final class Main {
         }
 
         // check other settings:
-        if (options.maxPower == 0) {
-            System.err.println("Need maximum power other than 0!");
+        if (options.maxPower <= 0) {
+            System.err.println("Need maximum power greater than 0!");
             printUsage(System.err, parser);
             return;
         }
