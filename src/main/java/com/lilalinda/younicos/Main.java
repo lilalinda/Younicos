@@ -36,7 +36,7 @@ public final class Main {
         }
 
         // check other settings:
-        if (options.maxPower <= 0) {
+        if (options.maxPowerInMW <= 0) {
             System.err.println("Need maximum power greater than 0!");
             printUsage(System.err, parser);
             return;
@@ -51,7 +51,7 @@ public final class Main {
         System.out.println("\nRunning validation of "+options.inputFile.getAbsolutePath());
         try {
             PowerProfile pp = PowerProfile.importFromXML(options.inputFile);
-            boolean valid = pp.validate(options.maxPower);
+            boolean valid = pp.validate(Math.round(options.maxPowerInMW * 1000));
             System.out.println("   *** The given XML file is "+(valid?"":"NOT ")+"valid! ***\n");
         } catch (Exception e) {
             e.printStackTrace();
@@ -63,7 +63,7 @@ public final class Main {
         boolean displayHelp = false;
 
         @Option(name="-m",metaVar="MAX",usage="max. power to charge and discharge (in MW)")
-        float maxPower = 0;
+        float maxPowerInMW = 0;
 
         @Option(name="-f",usage="XML file to validate")
         File inputFile;
