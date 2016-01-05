@@ -5,6 +5,7 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,13 +22,13 @@ public final class TestPowerProfile {
     private Date start = new Date();
     private List<PowerDatePair> list = new ArrayList<PowerDatePair>();
     {
-        list.add(new PowerDatePair(new Date(start.getTime() + 500L), 1000L));
+        list.add(new PowerDatePair(new Date(start.getTime() + 500L), -1000L));
     }
 
     // --- exceptions
 
     @Test(expected = RuntimeException.class)
-    public void readFromNULL() throws IOException, SAXException, ParserConfigurationException {
+    public void readFromNULL() throws IOException, SAXException, ParserConfigurationException, ParseException {
         PowerProfile pp = PowerProfile.importFromXML(null);
     }
 
@@ -35,7 +36,10 @@ public final class TestPowerProfile {
 
     @Test
     public void withValidPP() throws IOException {
-        PowerProfile pp = new PowerProfile(start, new Date(start.getTime() + 4000L), list);
+        PowerProfile pp = new PowerProfile(
+                start,
+                new Date(start.getTime() + 4000L),
+                list);
         assertTrue("valid power profile", pp.validate(6000L));
     }
 
@@ -43,7 +47,10 @@ public final class TestPowerProfile {
 
     @Test
     public void endBeforeStart() {
-        PowerProfile pp = new PowerProfile(start, new Date(start.getTime() - 2000L), list);
+        PowerProfile pp = new PowerProfile(
+                start,
+                new Date(start.getTime() - 2000L),
+                list);
         assertFalse("end before start", pp.validate(6000L));
     }
 
@@ -55,7 +62,43 @@ public final class TestPowerProfile {
 
     @Test
     public void powerTooHigh() {
-        PowerProfile pp = new PowerProfile(start, start, list);
+        PowerProfile pp = new PowerProfile(
+                start,
+                new Date(start.getTime() + 4000L),
+                list);
         assertFalse("power too high", pp.validate(600L));
+    }
+
+    @Test
+    public void sequenceNotOrdered() {
+        List<PowerDatePair> updatedList = new ArrayList<>(list);
+        updatedList.add(new PowerDatePair(new Date(start.getTime() + 100L), 5000L));
+        PowerProfile pp = new PowerProfile(
+                start,
+                new Date(start.getTime() + 4000L),
+                updatedList);
+        assertFalse("unordered list", pp.validate(6000L));
+    }
+
+    @Test
+    public void sequenceBeforeStart() {
+        List<PowerDatePair> updatedList = new ArrayList<>(list);
+        updatedList.add(new PowerDatePair(new Date(start.getTime() - 100L), 500L));
+        PowerProfile pp = new PowerProfile(
+                start,
+                new Date(start.getTime() + 4000L),
+                updatedList);
+        assertFalse("sequence before START", pp.validate(6000L));
+    }
+
+    @Test
+    public void sequenceAfterEnd() {
+        List<PowerDatePair> updatedList = new ArrayList<>(list);
+        updatedList.add(new PowerDatePair(new Date(start.getTime() - 100L), -3000L));
+        PowerProfile pp = new PowerProfile(
+                start,
+                new Date(start.getTime() + 4000L),
+                updatedList);
+        assertFalse("sequence before START", pp.validate(6000L));
     }
 }

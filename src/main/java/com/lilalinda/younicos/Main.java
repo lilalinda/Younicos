@@ -51,8 +51,9 @@ public final class Main {
         System.out.println("\nRunning validation of "+options.inputFile.getAbsolutePath());
         try {
             PowerProfile pp = PowerProfile.importFromXML(options.inputFile);
+            System.out.print(pp.toString());
             boolean valid = pp.validate(Math.round(options.maxPowerInMW * 1000));
-            System.out.println("   *** The given XML file is "+(valid?"":"NOT ")+"valid! ***\n");
+            System.out.println("\n*** The given XML file is "+(valid?"":"NOT ")+"valid! ***\n");
         } catch (Exception e) {
             e.printStackTrace();
         }
