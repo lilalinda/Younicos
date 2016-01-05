@@ -94,11 +94,11 @@ public final class TestPowerProfile {
     @Test
     public void sequenceAfterEnd() {
         List<PowerDatePair> updatedList = new ArrayList<>(list);
-        updatedList.add(new PowerDatePair(new Date(start.getTime() - 100L), -3000L));
+        updatedList.add(new PowerDatePair(new Date(start.getTime() + 5000L), -3000L));
         PowerProfile pp = new PowerProfile(
                 start,
                 new Date(start.getTime() + 4000L),
                 updatedList);
-        assertFalse("sequence before START", pp.validate(6000L));
+        assertFalse("sequence after END", pp.validate(6000L));
     }
 }

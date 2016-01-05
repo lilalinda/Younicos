@@ -35,9 +35,7 @@ public final class PowerDatePair implements Comparable<PowerDatePair> {
 
         PowerDatePair that = (PowerDatePair) o;
 
-        if (powerInKW != that.powerInKW) return false;
-        return timestamp.equals(that.timestamp);
-
+        return powerInKW == that.powerInKW && timestamp.equals(that.timestamp);
     }
 
     @Override

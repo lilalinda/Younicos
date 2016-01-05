@@ -9,7 +9,7 @@ import java.io.PrintWriter;
 /**
  * Handling XML parsing errors to quiet the warnings.
  */
-public class MyErrorHandler implements ErrorHandler {
+public final class MyErrorHandler implements ErrorHandler {
     private PrintWriter out;
 
     MyErrorHandler(PrintWriter out) {

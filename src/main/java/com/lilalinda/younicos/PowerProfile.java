@@ -59,7 +59,7 @@ public final class PowerProfile {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
         // go through sequence of tuples:
-        SortedSet<PowerDatePair> powerDatePairs = new TreeSet<PowerDatePair>();
+        SortedSet<PowerDatePair> powerDatePairs = new TreeSet<>();
         NodeList nodeList = doc.getElementsByTagName("younicos:power");
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node node = nodeList.item(i);
@@ -78,7 +78,7 @@ public final class PowerProfile {
         return new PowerProfile(
                 dateFormat.parse(doc.getElementsByTagName("younicos:start").item(0).getTextContent()),
                 dateFormat.parse(doc.getElementsByTagName("younicos:end").item(0).getTextContent()),
-                new ArrayList<PowerDatePair>(powerDatePairs));
+                new ArrayList<>(powerDatePairs));
     }
 
     @Override
@@ -112,7 +112,7 @@ public final class PowerProfile {
             // sequence times ordered
             if (pdp.timestamp.before(lastTimeStamp)) return false;
             lastTimeStamp = pdp.timestamp;
-            // TODO power value changes not more than max power (or absolute values?)
+            // power value not more than max power
             if (Math.abs(pdp.powerInKW) > maxPowerInKW) return false;
         }
 
